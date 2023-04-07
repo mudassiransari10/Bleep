@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 contract SocialMedia {
-struct Campaign {
+    struct Campaign {
         address owner;
         string title;
         string description;
@@ -12,11 +12,20 @@ struct Campaign {
         string image; 
         address[] donators; 
         uint256[] donations; 
+        uint256 likes;
     }
     mapping(uint256 => Campaign) public campaigns; 
-
     uint256 public numberOfCampaigns = 0; 
     
+    struct Post{
+        address owner;
+        string content; 
+        string image; 
+        uint256 likes; 
+    }
+    mapping(uint256 => Post) public posts;
+    uint256 public numberOfPosts = 0; 
+
     function createCampaign(address _owner, string memory _title, string memory _description, uint256 _target, uint256 _deadline, string memory _image) public returns(uint256) {
         Campaign storage campaign = campaigns[numberOfCampaigns];
 
@@ -28,11 +37,25 @@ struct Campaign {
         campaign.deadline = _deadline; 
         campaign.amountCollected = 0; 
         campaign.image = _image; 
+        campaign.likes = 0;
 
         numberOfCampaigns++;
 
         return numberOfCampaigns-1; 
-    }   
+    } 
+
+    function createPost( address _owner, string memory _content, string memory _image, uint256 _likes) public returns(uint256) {
+        Post storage post = posts[numberOfPosts];
+
+        require(bytes(_content).length!= 0, "There should be some textual content to be posted.");
+        post.owner = _owner; 
+        post.content = _content;
+        post.image = _image;
+        post.likes = _likes;
+
+        numberOfPosts++;
+        return numberOfPosts;
+    }
 
     function donatoToCampaign(uint256 _id) public payable {
         uint256 amount = msg.value; // how do we get msg
