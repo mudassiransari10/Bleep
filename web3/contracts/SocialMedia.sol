@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract SocialMedia {
+import "@thirdweb-dev/contracts/extension/Upgradeable.sol";
+import "@thirdweb-dev/contracts/extension/Initializable.sol";
+
+contract SocialMedia is Upgrade{
     struct Campaign {
         address owner;
         string title;
